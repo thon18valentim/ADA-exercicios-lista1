@@ -3,7 +3,7 @@ using CsvHelper.Configuration;
 using Exercicios_logica_ADA;
 using System.Globalization;
 
-int[,] distancias = new int[5, 5];
+int[,] distancias = new int[5,5];
 
 var config = new CsvConfiguration(CultureInfo.InvariantCulture)
 {
@@ -14,12 +14,16 @@ var nomeArquivo = "matriz.txt";
 var caminhoDesktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 var caminhoArquivo = Path.Combine(caminhoDesktop, nomeArquivo);
 
-using (var reader = new StreamReader(caminhoArquivo))
+var contador = 0;
 
-using (var csv = new CsvReader(reader, config))
+using (var reader = new StreamReader(caminhoArquivo))
+using (var csv = new CsvParser(reader, config))
 {
-  var records = csv.GetRecords<dynamic>().ToList();
-  Console.WriteLine(records);
+  while (csv.Read())
+  {
+    Console.WriteLine(csv.Record);
+    contador++;
+  }
 }
 
 //for (int i = 0; i < conteudo.Length; i++)
