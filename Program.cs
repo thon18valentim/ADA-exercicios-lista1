@@ -1,30 +1,48 @@
-﻿using Exercicios_logica_ADA;
+﻿using CsvHelper;
+using CsvHelper.Configuration;
+using Exercicios_logica_ADA;
+using System.Globalization;
 
 int[,] distancias = new int[5, 5];
 
-var conteudo = Utils.ReadFileFromDesktop("matriz.txt");
-
-for (int i = 0; i < conteudo.Length; i++)
+var config = new CsvConfiguration(CultureInfo.InvariantCulture)
 {
-  for (int j = 0; j < conteudo.Length; j++)
-  {
-    var c = conteudo[i].Split(',')[j];
-    _ = int.TryParse(c, out distancias[i, j]);
-  }
+  HasHeaderRecord = false,
+};
+
+var nomeArquivo = "matriz.txt";
+var caminhoDesktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+var caminhoArquivo = Path.Combine(caminhoDesktop, nomeArquivo);
+
+using (var reader = new StreamReader(caminhoArquivo))
+
+using (var csv = new CsvReader(reader, config))
+{
+  var records = csv.GetRecords<dynamic>().ToList();
+  Console.WriteLine(records);
 }
 
-Utils.ImprimirMatriz(distancias, conteudo.Length);
+//for (int i = 0; i < conteudo.Length; i++)
+//{
+//  for (int j = 0; j < conteudo.Length; j++)
+//  {
+//    var c = conteudo[i].Split(',')[j];
+//    _ = int.TryParse(c, out distancias[i, j]);
+//  }
+//}
 
-conteudo = Utils.ReadFileFromDesktop("caminho.txt")[0].Split(',');
+//Utils.ImprimirMatriz(distancias, conteudo.Length);
 
-List<int> trajeto = new();
-for (int i = 0; i < conteudo.Length; i++)
-{
-  _ = int.TryParse(conteudo[i], out var dado);
-  trajeto.Add(dado);
-}
+//conteudo = Utils.ReadFileFromDesktop("caminho.txt")[0].Split(',');
 
-var percurso = Utils.CalcularPercurso(distancias, trajeto.ToArray());
+//List<int> trajeto = new();
+//for (int i = 0; i < conteudo.Length; i++)
+//{
+//  _ = int.TryParse(conteudo[i], out var dado);
+//  trajeto.Add(dado);
+//}
 
-Console.WriteLine($"\nTrajeto: {string.Join(",", trajeto)}");
-Console.WriteLine($"O percurso percorrido foi de {percurso} km.");
+//var percurso = Utils.CalcularPercurso(distancias, trajeto.ToArray());
+
+//Console.WriteLine($"\nTrajeto: {string.Join(",", trajeto)}");
+//Console.WriteLine($"O percurso percorrido foi de {percurso} km.");
