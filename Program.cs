@@ -1,4 +1,5 @@
-﻿
+﻿using Exercicios_logica_ADA;
+
 int[,] distancias = new int[5, 5];
 
 for (int i = 0; i < 5; i++)
@@ -23,14 +24,7 @@ for (int i = 0; i < 5; i++)
 }
 
 Console.WriteLine("\n");
-for (int i = 0; i < 5; i++)
-{
-  for (int j = 0; j < 5; j++)
-  {
-    Console.Write(string.Format("{0} ", distancias[i, j]));
-  }
-  Console.Write(Environment.NewLine + Environment.NewLine);
-}
+Utils.ImprimirMatriz(distancias, 5);
 Console.ReadLine();
 
 List<int> trajeto = new();
@@ -53,12 +47,7 @@ do
 
 } while (true);
 
-int percurso = 0;
-for (int i = 0; i < trajeto.Count; i++)
-{
-  if (i < trajeto.Count - 1)
-    percurso += distancias[trajeto[i] - 1, trajeto[i + 1] - 1];
-}
+var percurso = Utils.CalcularPercurso(distancias, trajeto.ToArray());
 
 Console.WriteLine($"\nTrajeto: {string.Join(",",trajeto)}");
 Console.WriteLine($"O percurso percorrido foi de {percurso} km.");
