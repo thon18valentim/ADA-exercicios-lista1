@@ -2,52 +2,29 @@
 
 int[,] distancias = new int[5, 5];
 
-for (int i = 0; i < 5; i++)
+var conteudo = Utils.ReadFileFromDesktop("matriz.txt");
+
+for (int i = 0; i < conteudo.Length; i++)
 {
-  for (int j = 0; j < 5; j++)
+  for (int j = 0; j < conteudo.Length; j++)
   {
-    if (i == j)
-    {
-      distancias[i, j] = 0;
-    }
-    else if (i > j)
-    {
-      distancias[i, j] = distancias[j, i];
-    }
-    else
-    {
-      Console.WriteLine($"Entre com a distância entre {i + 1} e {j + 1}");
-      _ = int.TryParse(Console.ReadLine(), out var distancia);
-      distancias[i, j] = distancia;
-    }
+    var c = conteudo[i].Split(',')[j];
+    _ = int.TryParse(c, out distancias[i, j]);
   }
 }
 
-Console.WriteLine("\n");
-Utils.ImprimirMatriz(distancias, 5);
-Console.ReadLine();
+Utils.ImprimirMatriz(distancias, conteudo.Length);
+
+conteudo = Utils.ReadFileFromDesktop("caminho.txt")[0].Split(',');
 
 List<int> trajeto = new();
-do
+for (int i = 0; i < conteudo.Length; i++)
 {
-  Console.WriteLine("Digite a proxima cidade do trajeto desejado (entre com 0 pra finalizar): ");
-  bool converteu = int.TryParse(Console.ReadLine(), out int local);
-
-  if (!converteu || local > 5 || local < 1)
-  {
-    if (local != 0)
-      Console.WriteLine("Erro, cidade invalida!");
-    else
-      break;
-
-    continue;
-  }
-
-  trajeto.Add(local);
-
-} while (true);
+  _ = int.TryParse(conteudo[i], out var dado);
+  trajeto.Add(dado);
+}
 
 var percurso = Utils.CalcularPercurso(distancias, trajeto.ToArray());
 
-Console.WriteLine($"\nTrajeto: {string.Join(",",trajeto)}");
+Console.WriteLine($"\nTrajeto: {string.Join(",", trajeto)}");
 Console.WriteLine($"O percurso percorrido foi de {percurso} km.");

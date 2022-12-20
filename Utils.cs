@@ -3,11 +3,11 @@ namespace Exercicios_logica_ADA
 {
   public static class Utils
   {
-    public static void ImprimirMatriz(int [,] matriz, int size)
+    public static void ImprimirMatriz(int [,] matriz, int tamanho)
     {
-      for (int i = 0; i < size; i++)
+      for (int i = 0; i < tamanho; i++)
       {
-        for (int j = 0; j < size; j++)
+        for (int j = 0; j < tamanho; j++)
         {
           Console.Write(string.Format("{0} ", matriz[i, j]));
         }
@@ -25,6 +25,14 @@ namespace Exercicios_logica_ADA
       }
 
       return percurso;
+    }
+
+    public static string[] ReadFileFromDesktop(string nomeArquivo)
+    {
+      var caminhoDesktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+      var caminhoArquivo = Path.Combine(caminhoDesktop, nomeArquivo);
+
+      return File.ReadAllLines(caminhoArquivo);
     }
   }
 }
