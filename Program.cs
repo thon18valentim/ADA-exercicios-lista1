@@ -1,24 +1,25 @@
 ﻿using Exercicios_logica_ADA;
 
-int[,] distancias = new int[5, 5];
-
 var conteudo = Utils.ReadFileFromDesktop("matriz.txt");
+var tamanho = conteudo.Length;
 
-for (int i = 0; i < conteudo.Length; i++)
+int[,] distancias = new int[tamanho, tamanho];
+
+for (int i = 0; i < tamanho; i++)
 {
-  for (int j = 0; j < conteudo.Length; j++)
+  for (int j = 0; j < tamanho; j++)
   {
     var c = conteudo[i].Split(',')[j];
     _ = int.TryParse(c, out distancias[i, j]);
   }
 }
 
-Utils.ImprimirMatriz(distancias, conteudo.Length);
+Utils.ImprimirMatriz(distancias, tamanho);
 
 conteudo = Utils.ReadFileFromDesktop("caminho.txt")[0].Split(',');
 
 List<int> trajeto = new();
-for (int i = 0; i < conteudo.Length; i++)
+for (int i = 0; i < tamanho; i++)
 {
   _ = int.TryParse(conteudo[i], out var dado);
   trajeto.Add(dado);
