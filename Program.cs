@@ -3,50 +3,63 @@ using CsvHelper.Configuration;
 using Exercicios_logica_ADA;
 using System.Globalization;
 
-int[,] distancias = new int[5,5];
-
-var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+namespace Program
 {
-  HasHeaderRecord = false,
-};
-
-var nomeArquivo = "matriz.txt";
-var caminhoDesktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-var caminhoArquivo = Path.Combine(caminhoDesktop, nomeArquivo);
-
-var contador = 0;
-
-using (var reader = new StreamReader(caminhoArquivo))
-using (var csv = new CsvParser(reader, config))
-{
-  while (csv.Read())
+  public static class Program
   {
-    Console.WriteLine(csv.Record);
-    contador++;
+    static void Main()
+    {
+      var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+      {
+        HasHeaderRecord = false,
+      };
+
+      var caminhoDesktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+      var caminhoArquivo = Path.Combine(caminhoDesktop, "matriz.txt");
+
+      using var reader = new StreamReader(caminhoArquivo);
+      using var csv = new CsvParser(reader, config);
+
+      if (!csv.Read())
+        return;
+
+      var tamanho = csv.Record.Length;
+
+      int[,] distancias = new int[tamanho, tamanho];
+
+      for (int i = 0; i < tamanho; i++)
+      {
+        var conteudo = csv.Record;
+
+        for (int j = 0; j < tamanho; j++)
+        {
+          _ = int.TryParse(conteudo[j], out distancias[i, j]);
+        }
+
+        csv.Read();
+      }
+
+      Utils.ImprimirMatriz(distancias, tamanho);
+
+      caminhoArquivo = Path.Combine(caminhoDesktop, "caminho.txt");
+      using var readerTrajeto = new StreamReader(caminhoArquivo);
+      using var csvTrajeto = new CsvParser(readerTrajeto, config);
+
+      if (!csvTrajeto.Read())
+        return;
+
+      var tamanhoTrajeto = csvTrajeto.Record.Length;
+
+      int[] trajeto = new int[tamanhoTrajeto];
+
+      var dadosTrajeto = csvTrajeto.Record;
+      for (int i = 0; i < dadosTrajeto.Length; i++)
+        _ = int.TryParse(dadosTrajeto[i], out trajeto[i]);
+
+      var percurso = Utils.CalcularPercurso(distancias, trajeto);
+
+      Console.WriteLine($"\nTrajeto: {string.Join(",", trajeto)}");
+      Console.WriteLine($"O percurso percorrido foi de {percurso} km.");
+    }
   }
 }
-
-//for (int i = 0; i < conteudo.Length; i++)
-//{
-//  for (int j = 0; j < conteudo.Length; j++)
-//  {
-//    var c = conteudo[i].Split(',')[j];
-//    _ = int.TryParse(c, out distancias[i, j]);
-//  }
-//}
-
-//Utils.ImprimirMatriz(distancias, conteudo.Length);
-
-//conteudo = Utils.ReadFileFromDesktop("caminho.txt")[0].Split(',');
-
-//List<int> trajeto = new();
-//for (int i = 0; i < conteudo.Length; i++)
-//{
-//  _ = int.TryParse(conteudo[i], out var dado);
-//  trajeto.Add(dado);
-//}
-
-//var percurso = Utils.CalcularPercurso(distancias, trajeto.ToArray());
-
-//Console.WriteLine($"\nTrajeto: {string.Join(",", trajeto)}");
-//Console.WriteLine($"O percurso percorrido foi de {percurso} km.");
