@@ -14,8 +14,18 @@ namespace Program
         HasHeaderRecord = false,
       };
 
+      var nomeArquivo = "matriz.txt";
       var caminhoDesktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-      var caminhoArquivo = Path.Combine(caminhoDesktop, "matriz.txt");
+      var caminhoArquivo = Path.Combine(caminhoDesktop, nomeArquivo);
+
+      var nomeArquivoTrajeto = "caminho.txt";
+      var caminhoArquivoTrajeto = Path.Combine(caminhoDesktop, nomeArquivoTrajeto);
+
+      if (!File.Exists(caminhoArquivo) || !File.Exists(caminhoArquivoTrajeto))
+      {
+        Console.WriteLine($"Erro, arquivo(s) não existe.");
+        return;
+      }
 
       using var reader = new StreamReader(caminhoArquivo);
       using var csv = new CsvParser(reader, config);
@@ -41,8 +51,7 @@ namespace Program
 
       Utils.ImprimirMatriz(distancias, tamanho);
 
-      caminhoArquivo = Path.Combine(caminhoDesktop, "caminho.txt");
-      using var readerTrajeto = new StreamReader(caminhoArquivo);
+      using var readerTrajeto = new StreamReader(caminhoArquivoTrajeto);
       using var csvTrajeto = new CsvParser(readerTrajeto, config);
 
       if (!csvTrajeto.Read())
