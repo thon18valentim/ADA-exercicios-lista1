@@ -22,7 +22,11 @@ namespace Program
 
       Utils.ImprimirMatriz(distancias, tamanho);
 
-      var conteudoTrajeto = Utils.ReadFileFromDesktop("caminho.txt")[0].Split(',');
+      var conteudoTrajeto = Utils.ReadFileFromDesktop("caminho.txt")?[0].Split(',');
+
+      if (conteudoTrajeto == null)
+        return;
+
       var tamanhoTrajeto = conteudoTrajeto.Length;
 
       int [] trajeto = new int[tamanhoTrajeto];

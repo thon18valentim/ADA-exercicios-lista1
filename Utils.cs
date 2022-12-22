@@ -27,10 +27,16 @@ namespace Exercicios_logica_ADA
       return percurso;
     }
 
-    public static string[] ReadFileFromDesktop(string nomeArquivo)
+    public static string[]? ReadFileFromDesktop(string nomeArquivo)
     {
       var caminhoDesktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
       var caminhoArquivo = Path.Combine(caminhoDesktop, nomeArquivo);
+
+      if (!File.Exists(caminhoArquivo))
+      {
+        Console.WriteLine($"Erro, arquivo {nomeArquivo} não existe.");
+        return default;
+      }
 
       return File.ReadAllLines(caminhoArquivo);
     }
